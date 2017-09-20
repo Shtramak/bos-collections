@@ -15,11 +15,11 @@ public interface Collection<E> extends Iterable<E> {
 
     boolean remove(Object o);
 
-    boolean addAll(java.util.Collection<? extends E> c);
+    boolean addAll(Collection<? extends E> c);
 
-    boolean removeAll(java.util.Collection<?> c);
+    boolean removeAll(Collection<?> c);
 
-    boolean retainAll(java.util.Collection<?> c);
+    boolean retainAll(Collection<?> c);
 
     void clear();
 
