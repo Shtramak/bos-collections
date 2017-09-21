@@ -1,29 +1,17 @@
-import java.util.Iterator;
-
 public interface Collection<E> extends Iterable<E> {
     int size();
 
     boolean isEmpty();
 
-    boolean contains(Object o);
+    <T extends E> boolean contains(T element);
 
-    Iterator<E> iterator();
+    E[] toArray();
 
-    Object[] toArray();
+    <T extends E> boolean add(T element);
 
-    boolean add(E e);
+    <T extends E> boolean remove(T element);
 
-    boolean remove(Object o);
-
-    boolean addAll(Collection<? extends E> c);
-
-    boolean removeAll(Collection<?> c);
-
-    boolean retainAll(Collection<?> c);
+    <T extends E> void add(int index, T element);
 
     void clear();
-
-    boolean equals(Object o);
-
-    int hashCode();
 }
