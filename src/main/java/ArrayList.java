@@ -18,33 +18,57 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Iterator<E>() {
+            int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return (size - index > 0);
+            }
+
+            @Override
+            public E next() {
+                return data[index++];
+            }
+        };
     }
 
     @Override
     public <T extends E> boolean contains(T element) {
+        for (E item : data) {
+            if (item.equals(element))
+                return true;
+        }
         return false;
     }
 
     @Override
     public <T extends E> boolean remove(T element) {
+        for (int i = 0; i < size(); i++) {
+            if (data[i].equals(element)) {
+                remove(i);
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public E[] toArray() {
-        return (E[]) new Object[]{};
+        E[] result = (E[]) new Object[size];
+        System.arraycopy(data, 0, result, 0, size);
+        return result;
     }
 
     @Override
@@ -59,12 +83,28 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public <T extends E> boolean add(T element) {
-        return false;
+        if (data.length == size) {
+            E[] tmp = (E[]) new Object[size * 2];
+            System.arraycopy(data, 0, tmp, 0, size);
+            data = tmp;
+        }
+        data[size++] = element;
+        return true;
     }
 
     @Override
     public E remove(int index) {
-        return null;
+        if (index < 0 || index > size - 1)
+            throw new IllegalArgumentException("Argument is out from range");
+
+        E removedElement = (E) data[index];
+
+        int numMoved = size - index - 1;
+        if (numMoved > 0)
+            System.arraycopy(data, index+1, data, index, numMoved);
+        data[--size] = null;
+
+        return removedElement;
     }
 
     @Override
