@@ -32,7 +32,19 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Iterator<E>() {
+            int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return (size - index > 0);
+            }
+
+            @Override
+            public E next() {
+                return data[index++];
+            }
+        };
     }
 
     @Override
@@ -42,6 +54,12 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public <T extends E> boolean remove(T element) {
+        for (int i = 0; i < size(); i++) {
+            if (data[i].equals(element)) {
+                remove(i);
+                return true;
+            }
+        }
         return false;
     }
 
@@ -49,7 +67,9 @@ public class ArrayList<E> implements List<E> {
     @Override
     @SuppressWarnings("unchecked")
     public E[] toArray() {
-        return (E[]) Arrays.copyOf(data, size);
+        E[] result = (E[]) new Object[size];
+        System.arraycopy(data, 0, result, 0, size);
+        return result;
     }
 
     //Повернення елементу колекції по індексу
@@ -77,19 +97,30 @@ public class ArrayList<E> implements List<E> {
     }
 
     //Додавання нового елементу в кінець
+
+    //Згідний з такою перевіркою на розмірність   метод capacityCheck() або лишній або привести до вигляду як у методі add()
     @Override
     public <T extends E> boolean add(T element) {
-        capacityCheck();
+        if (data.length == size) {
+            E[] tmp = (E[]) new Object[size * 2];
+            System.arraycopy(data, 0, tmp, 0, size);
+            data = tmp;
+        }
         data[size++] = element;
         return true;
     }
 
     //Вилучення елементу по індексу
+
+    //Є окремий метод rangeCheck(index) перевірка індексу в ньому.
+    // Лишив свою реалізацію, окрім перевірки (numMoved > 0)
     @Override
     public E remove(int index) {
         rangeCheck(index);
+
         E oldValue = data[index];
         int numMoved = size - index - 1;
+        if (numMoved > 0)
         System.arraycopy(data, index + 1, data, index, numMoved);
         data[--size] = null;
         return oldValue;
@@ -122,6 +153,7 @@ public class ArrayList<E> implements List<E> {
         capacityCheck();
         System.arraycopy(data, index, data, index + 1, size - index);
         data[index] = element;
+        size++;
     }
 
     //перевіряємо вмістимість масива, якщо достигли максимуму збільшуємо в 2-ва ризи
