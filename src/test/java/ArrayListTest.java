@@ -49,7 +49,7 @@ public class ArrayListTest {
         assertTrue(emptyList.isEmpty());
         assertFalse(strings.isEmpty());
         assertFalse(integers.isEmpty());
-    }
+    }git
 
     @Test
     public void testIterator(){
@@ -61,20 +61,13 @@ public class ArrayListTest {
         assertEquals(emptyListToString,iteratorToString(emptyList));
 
     }
-    public static void main(String[] args) {
-        List<String> strings = new ArrayList<>();
-        strings.add("String1");
-        strings.add("String2");
-        strings.add("String3");
-        System.out.println(strings);
 
-        List<Integer> integers = new ArrayList<>();
-        for (int i = 0; i <15 ; i++) {
-            integers.add(i);
-        }
-
-        System.out.println(integers);
-
+    @Test
+    public void testContains(){
+        assertTrue(integers.contains(7));
+        assertTrue(strings.contains("String3"));
+        assertFalse(strings.contains("String4"));
+        assertFalse(emptyList.contains("bla-bla"));
     }
 
     private <E> String iteratorToString(List<E> list){
