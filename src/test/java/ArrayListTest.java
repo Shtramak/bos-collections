@@ -49,7 +49,7 @@ public class ArrayListTest {
         assertTrue(emptyList.isEmpty());
         assertFalse(strings.isEmpty());
         assertFalse(integers.isEmpty());
-    }git
+    }
 
     @Test
     public void testIterator(){
