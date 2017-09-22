@@ -11,20 +11,21 @@ import static org.junit.Assert.assertEquals;
 
 
 public class ArrayListTest {
+    List<String> testStringList = new ArrayList<>();
 
     @Before
     public void setup() {
-        List<String> testList = new ArrayList<String>();
-        testList.add("test1");
-        testList.add("test2");
-        testList.add("test3");
+        testStringList.add("test1");
+        testStringList.add("test2");
+        testStringList.add("test3");
     }
 
     @Test
     public void addTest(){
+        testStringList.add("test4");
 
-        String expected = "[test1, test2, test3]";
+        String expected = "[test1, test2, test3, test4]";
 
-        assertEquals(expected, testList.toString());
+        assertEquals(expected, testStringList.toString());
     }
 }
