@@ -18,14 +18,16 @@ public class ArrayList<E> implements List<E> {
         data = (E[]) new Object[size];
     }
 
+    //Повернення розміру колекції
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
+    //Перевірка колекції на наявність елементів
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
@@ -50,19 +52,22 @@ public class ArrayList<E> implements List<E> {
         return (E[]) Arrays.copyOf(data, size);
     }
 
+    //Повернення елементу колекції по індексу
     @Override
     public E get(int index) {
-        return null;
+       rangeCheck(index);
+
+       return data[index];
     }
 
-    //Перевірка не вийшов індекс за межі массиву
+    //Перевірка не вийшов індекс за межі колекції
     private void rangeCheck(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("get index =" + index + "but array size = " + size);
         }
     }
 
-    //Заміняємо елемент в указаному місці
+    //Заміняємо елемент по індексу
     @Override
     public <T extends E> E set(int index, T element) {
         rangeCheck(index);
@@ -71,14 +76,23 @@ public class ArrayList<E> implements List<E> {
         return oldObject;
     }
 
+    //Додавання нового елементу в кінець
     @Override
     public <T extends E> boolean add(T element) {
-        return false;
+        capacityCheck();
+        data[size++] = element;
+        return true;
     }
 
+    //Вилучення елементу по індексу
     @Override
     public E remove(int index) {
-        return null;
+        rangeCheck(index);
+        E oldValue = data[index];
+        int numMoved = size - index - 1;
+        System.arraycopy(data, index + 1, data, index, numMoved);
+        data[--size] = null;
+        return oldValue;
     }
 
     //шукаємо елемнент в смасиві, якщо знайшли то виртаємо його ІНДЕКС
@@ -121,8 +135,13 @@ public class ArrayList<E> implements List<E> {
         }
     }
 
+    //Очистка колекції
     @Override
     public void clear() {
+        for (int index = 0; index < size ; index++) {
+            data[index] = null;
+        }
 
+        size = 0;
     }
 }
