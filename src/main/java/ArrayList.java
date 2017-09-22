@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class ArrayList<E> implements List<E> {
@@ -14,26 +15,27 @@ public class ArrayList<E> implements List<E> {
     @SuppressWarnings("unchecked")
     public ArrayList(int size) {
         if (size < 0) throw new IllegalArgumentException("Argument must be positive. Entered argument:" + size);
-        this.size = size;
         data = (E[]) new Object[size];
     }
 
+    //Повернення розміру колекції
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
+    //Перевірка колекції на наявність елементів
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
-    public java.util.Iterator iterator() {
-        return new Iterator();
+    public Iterator<E> iterator() {
+        return new Iter();
     }
 
-    private class Iterator implements java.util.Iterator {
+    private class Iter implements Iterator<E> {
         int cursor = 0;
         int lastReturn = -1;
 
@@ -55,9 +57,7 @@ public class ArrayList<E> implements List<E> {
         @Override
         public void remove() {
             if(lastReturn<0) throw new IllegalStateException();
-
             ArrayList.this.remove(lastReturn);
-
             cursor = lastReturn;
             lastReturn--;
         }
@@ -88,24 +88,30 @@ public class ArrayList<E> implements List<E> {
         return false;
     }
 
+    //переводим ArrayList в масив
     @Override
     @SuppressWarnings("unchecked")
     public E[] toArray() {
-        return (E[]) Arrays.copyOf(data, size);
+        E[] result = (E[]) new Object[size];
+        System.arraycopy(data, 0, result, 0, size);
+        return result;
     }
 
+    //Повернення елементу колекції по індексу
     @Override
     public E get(int index) {
         rangeCheck(index);
         return data[index];
     }
 
+    //Перевірка не вийшов індекс за межі колекції
     private void rangeCheck(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("get index =" + index + "but array size = " + size);
         }
     }
 
+    //Заміняємо елемент по індексу
     @Override
     public <T extends E> E set(int index, T element) {
         rangeCheck(index);
@@ -114,16 +120,38 @@ public class ArrayList<E> implements List<E> {
         return oldObject;
     }
 
+    //Додавання нового елементу в кінець
+
+    //Згідний з такою перевіркою на розмірність   метод capacityCheck() або лишній або привести до вигляду як у методі add()
     @Override
     public <T extends E> boolean add(T element) {
-        return false;
+        if (data.length == size) {
+            E[] tmp = (E[]) new Object[size * 2];
+            System.arraycopy(data, 0, tmp, 0, size);
+            data = tmp;
+        }
+        data[size++] = element;
+        return true;
     }
 
+    //Вилучення елементу по індексу
+
+    //Є окремий метод rangeCheck(index) перевірка індексу в ньому.
+    // Лишив свою реалізацію, окрім перевірки (numMoved > 0)
     @Override
     public E remove(int index) {
-        return null;
+        rangeCheck(index);
+
+        E oldValue = data[index];
+        int numMoved = size - index - 1;
+        if (numMoved > 0)
+        System.arraycopy(data, index + 1, data, index, numMoved);
+        data[--size] = null;
+        return oldValue;
     }
 
+    //шукаємо елемнент в смасиві, якщо знайшли то виртаємо його ІНДЕКС
+    //якщо не знайшли то -1
     @Override
     public <T extends E> int indexOf(T element) {
         if (element == null) {
@@ -142,6 +170,7 @@ public class ArrayList<E> implements List<E> {
         return -1;
     }
 
+    //додаємо елемент у вказане місце, переміщачи всі елементи на один в право
     @Override
     public <T extends E> void add(int index, T element) {
         rangeCheck(index);
@@ -151,6 +180,7 @@ public class ArrayList<E> implements List<E> {
         size++;
     }
 
+    //перевіряємо вмістимість масива, якщо достигли максимуму збільшуємо в 2-ва ризи
     private void capacityCheck() {
         if (GROW_CAPACITY <= size + 1) {
             GROW_CAPACITY = GROW_CAPACITY + (GROW_CAPACITY >> 1);
@@ -161,8 +191,25 @@ public class ArrayList<E> implements List<E> {
         }
     }
 
+    //Очистка колекції
     @Override
     public void clear() {
+        for (int index = 0; index < size ; index++) {
+            data[index] = null;
+        }
 
+        size = 0;
+    }
+
+    @Override
+    public String toString() {
+        if (size==0) return "[]";
+        StringBuilder result = new StringBuilder("[");
+        for (int i=0;i<size;i++){
+            result.append(data[i]).append(", ");
+        }
+        int startIndex = result.lastIndexOf(", ");
+        result.replace(startIndex,result.length(),"]");
+        return result.toString();
     }
 }
