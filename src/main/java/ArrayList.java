@@ -184,8 +184,7 @@ public class ArrayList<E> implements List<E> {
             result.append(data[i]).append(", ");
         }
         int startIndex = result.lastIndexOf(", ");
-        int endIndex = result.length()-1;
-        result.replace(startIndex,endIndex,"]");
-        return result.toString().trim();
+        result.replace(startIndex,result.length(),"]");
+        return result.toString();
     }
 }
