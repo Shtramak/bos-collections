@@ -176,13 +176,6 @@ public class ArrayList<E> implements List<E> {
         size = 0;
     }
 
-      /*Забрав endIndex  замінив на просто result.length оскільки метод replace замінює від start позиції до end-1
-      і тому toString вкінці завждт лишав пробіл :)
-      Replaces the characters in a substring of this sequence
-      with characters in the specified {@code String}. The substring
-      begins at the specified {@code start} and extends to the character
-      at index {@code end - 1} or to the end of the
-      sequence if no such character exists.*/
     @Override
     public String toString() {
         if (size==0) return "[]";
