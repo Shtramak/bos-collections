@@ -108,6 +108,7 @@ public class ArrayList<E> implements List<E> {
         capacityCheck();
         System.arraycopy(data, index, data, index + 1, size - index);
         data[index] = element;
+        size++;
     }
 
     //перевіряємо вмістимість масива, якщо достигли максимуму збільшуємо в 2-ва ризи
