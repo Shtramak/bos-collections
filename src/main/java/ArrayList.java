@@ -14,7 +14,6 @@ public class ArrayList<E> implements List<E> {
     @SuppressWarnings("unchecked")
     public ArrayList(int size) {
         if (size < 0) throw new IllegalArgumentException("Argument must be positive. Entered argument:" + size);
-        this.size = size;
         data = (E[]) new Object[size];
     }
 
@@ -175,5 +174,18 @@ public class ArrayList<E> implements List<E> {
         }
 
         size = 0;
+    }
+
+    @Override
+    public String toString() {
+        if (size==0) return "[]";
+        StringBuilder result = new StringBuilder("[");
+        for (int i=0;i<size;i++){
+            result.append(data[i]).append(", ");
+        }
+        int startIndex = result.lastIndexOf(", ");
+        int endIndex = result.length()-1;
+        result.replace(startIndex,endIndex,"]");
+        return result.toString();
     }
 }
