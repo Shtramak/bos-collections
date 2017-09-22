@@ -186,6 +186,6 @@ public class ArrayList<E> implements List<E> {
         int startIndex = result.lastIndexOf(", ");
         int endIndex = result.length()-1;
         result.replace(startIndex,endIndex,"]");
-        return result.toString();
+        return result.toString().trim();
     }
 }
