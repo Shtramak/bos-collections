@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class ArrayList<E> implements List<E> {
@@ -30,11 +29,11 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public Iterator<E> iterator() {
-        return new Iter();
+    public java.util.Iterator iterator() {
+        return new Iterator();
     }
 
-    private class Iter implements Iterator<E> {
+    private class Iterator implements java.util.Iterator {
         int cursor = 0;
         int lastReturn = -1;
 
@@ -56,7 +55,9 @@ public class ArrayList<E> implements List<E> {
         @Override
         public void remove() {
             if(lastReturn<0) throw new IllegalStateException();
+
             ArrayList.this.remove(lastReturn);
+
             cursor = lastReturn;
             lastReturn--;
         }
@@ -147,6 +148,7 @@ public class ArrayList<E> implements List<E> {
         capacityCheck();
         System.arraycopy(data, index, data, index + 1, size - index);
         data[index] = element;
+        size++;
     }
 
     private void capacityCheck() {
