@@ -19,6 +19,7 @@ public class ArrayListTest {
         testStringList.add("test1");
         testStringList.add("test2");
         testStringList.add("test3");
+        testStringList.add("test4");
     }
 
     @Test
@@ -31,7 +32,7 @@ public class ArrayListTest {
     }
 
     @Test
-    public void addByIndexTest(){
+    public void testAddByIndex(){
         testStringList.add(2, "test5");
 
         String expected = "[test1, test2, test5, test3, test4]";
@@ -40,7 +41,7 @@ public class ArrayListTest {
     }
 
     @Test
-    public void removeTest(){
+    public void testRemove(){
         testStringList.remove(3);
 
         String expected = "[test1, test2]";
@@ -49,7 +50,7 @@ public class ArrayListTest {
     }
 
     @Test
-    public void removeTestWithBadIndex(){
+    public void testRemoveWithBadIndex(){
         String actual = "";
         try {
             testStringList.remove(10);
@@ -63,14 +64,14 @@ public class ArrayListTest {
     }
 
     @Test
-    public void indexOfTest(){
+    public void testIndexOf(){
         int actual = testStringList.indexOf("test1");
 
         assertEquals(0, actual);
     }
 
     @Test
-    public void indexOfTestNoElement(){
+    public void testIndexOfNoElement(){
         int actual = testStringList.indexOf("Error");
 
         assertEquals(-1, actual);
