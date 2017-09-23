@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class ArrayList<E> implements List<E> {
     private static final int DEFAULT_CAPACITY = 10;
@@ -31,19 +32,35 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<E>() {
-            int index = 0;
+        return new Iter();
+    }
 
-            @Override
-            public boolean hasNext() {
-                return (size - index > 0);
-            }
+    private class Iter implements Iterator<E> {
+        int cursor = 0;
+        int lastReturn = -1;
 
-            @Override
-            public E next() {
-                return data[index++];
+        @Override
+        public boolean hasNext() {
+            return cursor != size;
+        }
+
+        @Override
+        public E next() {
+            if(cursor >= size){
+                throw new NoSuchElementException();
             }
-        };
+            lastReturn = cursor;
+            cursor++;
+            return ArrayList.this.get(lastReturn);
+        }
+
+        @Override
+        public void remove() {
+            if(lastReturn<0) throw new IllegalStateException();
+            ArrayList.this.remove(lastReturn);
+            cursor = lastReturn;
+            lastReturn--;
+        }
     }
 
     @Override
@@ -53,10 +70,19 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public <T extends E> boolean remove(T element) {
-        for (int i = 0; i < size(); i++) {
-            if (data[i].equals(element)) {
-                remove(i);
-                return true;
+        if (element == null) {
+            for (int index = 0; index < size; index++) {
+                if (data[0] == null) {
+                    remove(index);
+                    return true;
+                }
+            }
+        } else {
+            for (int index = 0; index < size; index++) {
+                if (element.equals(data[0])) {
+                    remove(index);
+                    return true;
+                }
             }
         }
         return false;
@@ -74,9 +100,8 @@ public class ArrayList<E> implements List<E> {
     //Повернення елементу колекції по індексу
     @Override
     public E get(int index) {
-       rangeCheck(index);
-
-       return data[index];
+        rangeCheck(index);
+        return data[index];
     }
 
     //Перевірка не вийшов індекс за межі колекції
