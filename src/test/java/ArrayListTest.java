@@ -19,7 +19,6 @@ public class ArrayListTest {
         testStringList.add("test1");
         testStringList.add("test2");
         testStringList.add("test3");
-        testStringList.add("test4");
     }
 
     @Test
@@ -35,9 +34,23 @@ public class ArrayListTest {
     public void testAddByIndex(){
         testStringList.add(2, "test5");
 
-        String expected = "[test1, test2, test5, test3, test4]";
+        String expected = "[test1, test2, test5, test3]";
 
         assertEquals(expected, testStringList.toString());
+    }
+
+    @Test
+    public void testAddByWrongIndex(){
+        String actual = "";
+        try {
+            testStringList.add(20, "test5");
+        } catch (IndexOutOfBoundsException e){
+            actual += e.getMessage();
+        }
+
+        String expected = "get index =20but array size = 3";
+
+        assertEquals(expected, actual);
     }
 
     @Test
