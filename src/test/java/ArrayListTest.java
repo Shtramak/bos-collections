@@ -52,5 +52,17 @@ public class ArrayListTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void indexOfTest(){
+        int actual = testStringList.indexOf("test1");
 
+        assertEquals(0, actual);
+    }
+
+    @Test
+    public void indexOfTestNoElement(){
+        int actual = testStringList.indexOf("Error");
+
+        assertEquals(-1, actual);
+    }
 }
