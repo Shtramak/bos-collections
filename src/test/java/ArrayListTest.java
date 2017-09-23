@@ -11,17 +11,18 @@ import static org.junit.Assert.assertEquals;
 
 
 public class ArrayListTest {
-    List<String> testStringList = new ArrayList<>();
+    private List<String> testStringList;
 
     @Before
     public void setup() {
+        testStringList = new ArrayList<>();
         testStringList.add("test1");
         testStringList.add("test2");
         testStringList.add("test3");
     }
 
     @Test
-    public void addTest(){
+    public void testAdd(){
         testStringList.add("test4");
 
         String expected = "[test1, test2, test3, test4]";
