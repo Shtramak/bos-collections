@@ -28,4 +28,29 @@ public class ArrayListTest {
 
         assertEquals(expected, testStringList.toString());
     }
+
+    @Test
+    public void removeTest(){
+        testStringList.remove(3);
+
+        String expected = "[test1, test2]";
+
+        assertEquals(expected, testStringList.toString());
+    }
+
+    @Test
+    public void removeTestWithBadIndex(){
+        String actual = "";
+        try {
+            testStringList.remove(10);
+        } catch (IndexOutOfBoundsException e){
+            actual += e.getMessage();
+        }
+
+        String expected = "get index =10but array size = 3";
+
+        assertEquals(expected, actual);
+    }
+
+
 }
