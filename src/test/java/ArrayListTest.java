@@ -7,7 +7,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-// Shtramak : clear, size, isEmpty, iterator, contains
 public class ArrayListTest {
 
     private List<String> strings;
@@ -27,8 +26,7 @@ public class ArrayListTest {
         emptyList = new ArrayList<>(0);
     }
 
-    @Test // хз як протестувати цей метод без використання size()
-    //  думаю такий варіант можливий без використання size
+    @Test
     public void testClear() {
         strings.clear();
         assertEquals("[]", strings.toString());
