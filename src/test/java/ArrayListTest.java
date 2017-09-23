@@ -28,13 +28,14 @@ public class ArrayListTest {
     }
 
     @Test // хз як протестувати цей метод без використання size()
+    //  думаю такий варіант можливий без використання size
     public void testClear() {
         strings.clear();
-        assertEquals(0, strings.size());
+        assertEquals("[]", strings.toString());
         integers.clear();
-        assertEquals(0, integers.size());
+        assertEquals("[]", integers.toString());
         emptyList.clear();
-        assertEquals(0, emptyList.size());
+        assertEquals("[]", emptyList.toString());
     }
 
     @Test
