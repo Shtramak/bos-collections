@@ -30,6 +30,15 @@ public class ArrayListTest {
     }
 
     @Test
+    public void addByIndexTest(){
+        testStringList.add(2, "test5");
+
+        String expected = "[test1, test2, test5, test3, test4]";
+
+        assertEquals(expected, testStringList.toString());
+    }
+
+    @Test
     public void removeTest(){
         testStringList.remove(3);
 
