@@ -1,23 +1,11 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Iterator;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
 public class ArrayListTest {
-
-    /*
-     Можна зробити String константу для цієї стрічки. Код буде значно читабельнішим
-     "[line0, line1, line2, line3, line4, line5, line6, line7, line8, line9, line10, " +
-                "line11, line12, line13, line14, line15, line16, line17, line18, line19]"
-     Загальне зауваження до іменування тестів. Варто зробити їх переіменування згідно
-     загальноприйнятих правил іменування тестів
-     Тестові методи зав'язані на методі toArray() з цієї реалізації. Це погано, оскільки,
-     якщо цей метод "зламається" то полетять і всі тести повязані зним. Краще скористатись
-     методом toString(), оскільки прийнятий формат виводу як правило не підлягає зміні
-    */
-    private List<String> list;
     private List<String> strings;
     private List<Integer> integers;
     private List<Object> emptyList;
@@ -39,101 +27,132 @@ public class ArrayListTest {
         testStringList.add("test1");
         testStringList.add("test2");
         testStringList.add("test3");
-
     }
 
-    /*
-    У данному тесті ти фактично не перевіряєш основного - коли ти вставляєш елемент на і-ту позицію
-    вже існуючого контейнеру.
-    Контракт цього методу:
-     * Inserts the specified element at the specified position in this
-     * list. Shifts the element currently at that position (if any) and
-     * any subsequent elements to the right (adds one to their indices).
-    */
     @Test
-    public void addWithIndexTest() {
-        for (int i = 0; i < 20; i++) {
-            list.add(i, "line" + i);
-        }
+    public void testAddByIndexString() {
+        testStringList.add(0, "test0");
+        testStringList.add(2, "test2");
+        testStringList.add(5, "test5");
 
-        list.add(0, "Test1");
-        list.add(10, "Test10");
-        list.add(22, "Test22");
-
-
-        assertEquals("[Test1, line0, line1, line2, line3, line4, line5, line6, line7, line8, Test10, " +
-                "line9, line10, line11, line12, line13, line14, line15, line16, line17, line18, line19, Test22]", list.toString());
+        String expected = "[test0, test1, test2, test2, test3, test5]";
+        assertEquals(expected, testStringList.toString());
     }
 
-    @Test (expected = IndexOutOfBoundsException.class)
+    @Test
+    public void testAddByIndexInteger() {
+        integers.add(0, 100);
+        integers.add(7, 112);
+        integers.add(17, 115);
+
+        String expected = "[100, 0, 1, 2, 3, 4, 5, 112, 6, 7, 8, 9, 10, 11, 12, 13, 14, 115]";
+        assertEquals(expected, integers.toString());
+    }
+
+    @Test
+    public void testAddByIndexEmptyList() {
+        emptyList.add(0, 100);
+
+        String expected = "[100]";
+        assertEquals(expected, emptyList.toString());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
     public void addWithIndexOutOfBoundsExceptionTest() {
-        for (int i = 0; i < 20; i++) {
-            list.add(i, "line" + i);
-        }
-
-        list.add(-1, "Test22");
-        list.add(22, "Test22");
+        testStringList.add(-1, "Test22");
+        testStringList.add(22, "Test22");
     }
 
     @Test
-    public void testAdd() {
-        for (int i = 0; i < 20; i++) {
-            list.add("line" + i);
-        }
+    public void testAddString() {
+        testStringList.add("test4");
 
-        assertEquals("[line0, line1, line2, line3, line4, line5, line6, line7, line8, line9, line10, " +
-                "line11, line12, line13, line14, line15, line16, line17, line18, line19]", Arrays.toString(list.toArray()));
-    }
-
-    //Даний тест не тестує методу remove()
-    @Test
-    public void removeTest() {
-        for (int i = 0; i < 20; i++) {
-            list.add("line" + i);
-        }
-
-        assertEquals("[line0, line1, line2, line3, line4, line5, line6, line7, line8, line9, line10, " +
-                "line11, line12, line13, line14, line15, line16, line17, line18, line19]", Arrays.toString(list.toArray()));
+        String expected = "[test1, test2, test3, test4]";
+        assertEquals(expected, testStringList.toString());
     }
 
     @Test
-    public void toArrayTest() {
-        for (int i = 0; i < 20; i++) {
-            list.add("line" + i);
-        }
+    public void testAddInteger() {
+        integers.add(100);
 
-        assertEquals("[line0, line1, line2, line3, line4, line5, line6, line7, line8, line9, line10, " +
-                "line11, line12, line13, line14, line15, line16, line17, line18, line19]", Arrays.toString(list.toArray()));
+        String expected = "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 100]";
+        assertEquals(expected, integers.toString());
     }
 
-    /*
-        Даний тест не покриває ситуацій з вводом некоректних індексів: від'ємного і більшого за поле "size-1" у контейнері.
-        Доречі на даний момент це не враховано і у реалізації. Там можна буде отримати або null, або IndexOutOfBoundException
-        в залежності від ситуації. Тут доречно в кожному з випадків кидати IllegalArgumentException()
-    */
     @Test
-    public void getTest() {
-        for (int i = 0; i < 2; i++) {
-            list.add("line" + i);
-        }
+    public void testAddEmptyList() {
+        emptyList.add(1);
+        emptyList.add("test5");
 
-        assertEquals("line0", list.get(0));
+        String expected = "[1, test5]";
+        assertEquals(expected, emptyList.toString());
     }
 
-    /*
-    Аналогісна ситуація як і з попереднім тестом. Не покриті ситуації з "поганими" данними...
-    Ці тести потрібно розбити на кілька
-    */
     @Test
-    public void setTest() {
-        for (int i = 0; i < 2; i++) {
-            list.add("line" + i);
-        }
-
-        assertEquals("line0", list.set(0, "lineTest"));
-        assertEquals("[lineTest, line1]", list.toString());
+    public void testRemoveByElementTrue() {
+        boolean expected = testStringList.remove("test2");
+        assertTrue(expected);
     }
-}
+
+    @Test
+    public void testRemoveByElementFalse() {
+        boolean expectedListStringRemove = testStringList.remove("noElement");
+        boolean expectedListStringRemoveNull = testStringList.remove(null);
+        boolean expectedEmpty = emptyList.remove("noElement");
+        assertFalse(expectedListStringRemove);
+        assertFalse(expectedListStringRemoveNull);
+        assertFalse(expectedEmpty);
+    }
+
+    @Test
+    public void testRemoveByIndex() {
+        String expectedString = testStringList.remove(1);
+        int expectedInt = integers.remove(2);
+
+        assertEquals("test2", expectedString);
+        assertEquals(2, expectedInt);
+        String expectedStrToString = "[test1, test3]";
+        assertEquals(expectedStrToString, testStringList.toString());
+
+        String expectedIntToString = "[0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]";
+        assertEquals(expectedIntToString, integers.toString());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testRemoveByIndexIndexOutOfBoundsException() {
+        testStringList.remove(10);
+        testStringList.remove(-1);
+        emptyList.remove(0);
+    }
+
+    @Test
+    public void testToArray() {
+        String expected = "[test1, test2, test3]";
+        assertEquals(expected, Arrays.toString(testStringList.toArray()));
+    }
+
+    @Test
+    public void testGet() {
+        assertEquals("test1", testStringList.get(0));
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetIndexOutOfBoundsException() {
+        assertEquals("test1", testStringList.get(10));
+        assertEquals("test1", testStringList.get(-1));
+    }
+
+    @Test
+    public void testSet() {
+        assertEquals("test1", testStringList.set(0, "testSet"));
+        assertEquals("[testSet, test2, test3]", testStringList.toString());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSetIndexOutOfBoundsException() {
+        testStringList.set(10, "testSet");
+        testStringList.set(-1, "testSet");
+    }
 
     @Test
     public void testClear() {
@@ -189,45 +208,6 @@ public class ArrayListTest {
         int endIndex = result.length() - 1;
         result.replace(startIndex, endIndex, "]");
         return result.toString().trim();
-    }
-
-    @Test
-    public void testAdd() {
-        testStringList.add("test4");
-
-        String expected = "[test1, test2, test3, test4]";
-
-        assertEquals(expected, testStringList.toString());
-    }
-
-    @Test
-    public void testAddByIndex() {
-        testStringList.add(2, "test5");
-
-        String expected = "[test1, test2, test5, test3]";
-
-        assertEquals(expected, testStringList.toString());
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testAddByWrongIndex() {
-        String actual = "";
-        testStringList.add(20, "test5");
-    }
-
-    @Test
-    public void testRemove() {
-        testStringList.remove(3);
-
-        String expected = "[test1, test2]";
-
-        assertEquals(expected, testStringList.toString());
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testRemoveWithBadIndex() {
-        String actual = "";
-        testStringList.remove(10);
     }
 
     @Test
