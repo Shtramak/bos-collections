@@ -40,17 +40,32 @@ public class ArrayListTest {
      * any subsequent elements to the right (adds one to their indices).
     */
     @Test
-    public void add_i_T_Test() {
+    public void addWithIndexTest() {
         for (int i = 0; i < 20; i++) {
             list.add(i, "line" + i);
         }
 
-        assertEquals("[line0, line1, line2, line3, line4, line5, line6, line7, line8, line9, line10, " +
-                "line11, line12, line13, line14, line15, line16, line17, line18, line19]", Arrays.toString(list.toArray()));
+        list.add(0, "Test1");
+        list.add(10, "Test10");
+        list.add(22, "Test22");
+
+
+        assertEquals("[Test1, line0, line1, line2, line3, line4, line5, line6, line7, line8, Test10, " +
+                "line9, line10, line11, line12, line13, line14, line15, line16, line17, line18, line19, Test22]", list.toString());
+    }
+
+    @Test (expected = IndexOutOfBoundsException.class)
+    public void addWithIndexOutOfBoundsExceptionTest() {
+        for (int i = 0; i < 20; i++) {
+            list.add(i, "line" + i);
+        }
+
+        list.add(-1, "Test22");
+        list.add(22, "Test22");
     }
 
     @Test
-    public void add_T_Test() {
+    public void testAdd() {
         for (int i = 0; i < 20; i++) {
             list.add("line" + i);
         }
