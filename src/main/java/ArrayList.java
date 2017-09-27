@@ -17,15 +17,14 @@ public class ArrayList<E> implements List<E> {
         if (size < 0) throw new IllegalArgumentException("Argument must be positive. Entered argument:" + size);
         data = (E[]) new Object[size];
         GROW_CAPACITY = size;
+
     }
 
-    //Повернення розміру колекції
     @Override
     public int size() {
         return size;
     }
 
-    //Перевірка колекції на наявність елементів
     @Override
     public boolean isEmpty() {
         return size == 0;
@@ -47,7 +46,7 @@ public class ArrayList<E> implements List<E> {
 
         @Override
         public E next() {
-            if(cursor >= size){
+            if (cursor >= size) {
                 throw new NoSuchElementException();
             }
             lastReturn = cursor;
@@ -57,7 +56,7 @@ public class ArrayList<E> implements List<E> {
 
         @Override
         public void remove() {
-            if(lastReturn<0) throw new IllegalStateException();
+            if (lastReturn < 0) throw new IllegalStateException();
             ArrayList.this.remove(lastReturn);
             cursor = lastReturn;
             lastReturn--;
@@ -73,7 +72,7 @@ public class ArrayList<E> implements List<E> {
     public <T extends E> boolean remove(T element) {
         if (element == null) {
             for (int index = 0; index < size; index++) {
-                if (data[0] == null) {
+                if (data[index] == null) {
                     remove(index);
                     return true;
                 }
@@ -89,7 +88,6 @@ public class ArrayList<E> implements List<E> {
         return false;
     }
 
-    //переводим ArrayList в масив
     @Override
     @SuppressWarnings("unchecked")
     public E[] toArray() {
@@ -98,21 +96,18 @@ public class ArrayList<E> implements List<E> {
         return result;
     }
 
-    //Повернення елементу колекції по індексу
     @Override
     public E get(int index) {
         rangeCheck(index);
         return data[index];
     }
 
-    //Перевірка не вийшов індекс за межі колекції
     private void rangeCheck(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("get index =" + index + "but array size = " + size);
         }
     }
 
-    //Заміняємо елемент по індексу
     @Override
     public <T extends E> E set(int index, T element) {
         rangeCheck(index);
@@ -121,10 +116,6 @@ public class ArrayList<E> implements List<E> {
         return oldObject;
     }
 
-    //Вилучення елементу по індексу
-
-    //Є окремий метод rangeCheck(index) перевірка індексу в ньому.
-    // Лишив свою реалізацію, окрім перевірки (numMoved > 0)
     @Override
     public E remove(int index) {
         rangeCheck(index);
@@ -135,8 +126,6 @@ public class ArrayList<E> implements List<E> {
         return oldValue;
     }
 
-    //шукаємо елемнент в смасиві, якщо знайшли то виртаємо його ІНДЕКС
-    //якщо не знайшли то -1
     @Override
     public <T extends E> int indexOf(T element) {
         if (element == null) {
@@ -155,7 +144,6 @@ public class ArrayList<E> implements List<E> {
         return -1;
     }
 
-    //Додавання нового елементу в кінець
     @Override
     public <T extends E> boolean add(T element) {
         capacityCheck();
@@ -164,7 +152,6 @@ public class ArrayList<E> implements List<E> {
         return true;
     }
 
-    //додаємо елемент у вказане місце, переміщачи всі елементи на один в право
     @Override
     public <T extends E> void add(int index, T element) {
         rangeCheck(index);
@@ -174,39 +161,36 @@ public class ArrayList<E> implements List<E> {
         size++;
     }
 
-    //перевіряємо вмістимість масива, якщо достигли максимуму збільшуємо в 2-ва ризи
     private void capacityCheck() {
         if (GROW_CAPACITY <= size + 1) {
-            GROW_CAPACITY = GROW_CAPACITY + (GROW_CAPACITY >> 1);
+            GROW_CAPACITY = GROW_CAPACITY + (GROW_CAPACITY >> 1) + 1;
             if (GROW_CAPACITY < 0) {
                 throw new OutOfMemoryError();
             }
-            if (GROW_CAPACITY == 0){
+            if (GROW_CAPACITY == 0) {
                 GROW_CAPACITY = DEFAULT_CAPACITY;
             }
             data = Arrays.copyOf(data, GROW_CAPACITY);
         }
     }
 
-    //Очистка колекції
     @Override
     public void clear() {
-        for (int index = 0; index < size ; index++) {
+        for (int index = 0; index < size; index++) {
             data[index] = null;
         }
-
         size = 0;
     }
 
     @Override
     public String toString() {
-        if (size==0) return "[]";
+        if (size == 0) return "[]";
         StringBuilder result = new StringBuilder("[");
-        for (int i=0;i<size;i++){
+        for (int i = 0; i < size; i++) {
             result.append(data[i]).append(", ");
         }
         int startIndex = result.lastIndexOf(", ");
-        result.replace(startIndex,result.length(),"]");
+        result.replace(startIndex, result.length(), "]");
         return result.toString();
     }
 }
