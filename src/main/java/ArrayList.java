@@ -16,6 +16,7 @@ public class ArrayList<E> implements List<E> {
     public ArrayList(int size) {
         if (size < 0) throw new IllegalArgumentException("Argument must be positive. Entered argument:" + size);
         data = (E[]) new Object[size];
+        GROW_CAPACITY = size;
     }
 
     //Повернення розміру колекції
@@ -79,7 +80,7 @@ public class ArrayList<E> implements List<E> {
             }
         } else {
             for (int index = 0; index < size; index++) {
-                if (element.equals(data[0])) {
+                if (element.equals(data[index])) {
                     remove(index);
                     return true;
                 }
@@ -120,20 +121,6 @@ public class ArrayList<E> implements List<E> {
         return oldObject;
     }
 
-    //Додавання нового елементу в кінець
-
-    //Згідний з такою перевіркою на розмірність   метод capacityCheck() або лишній або привести до вигляду як у методі add()
-    @Override
-    public <T extends E> boolean add(T element) {
-        if (data.length == size) {
-            E[] tmp = (E[]) new Object[size * 2];
-            System.arraycopy(data, 0, tmp, 0, size);
-            data = tmp;
-        }
-        data[size++] = element;
-        return true;
-    }
-
     //Вилучення елементу по індексу
 
     //Є окремий метод rangeCheck(index) перевірка індексу в ньому.
@@ -143,9 +130,7 @@ public class ArrayList<E> implements List<E> {
         rangeCheck(index);
 
         E oldValue = data[index];
-        int numMoved = size - index - 1;
-        if (numMoved > 0)
-        System.arraycopy(data, index + 1, data, index, numMoved);
+        System.arraycopy(data, index + 1, data, index, size - index);
         data[--size] = null;
         return oldValue;
     }
@@ -170,6 +155,15 @@ public class ArrayList<E> implements List<E> {
         return -1;
     }
 
+    //Додавання нового елементу в кінець
+    @Override
+    public <T extends E> boolean add(T element) {
+        capacityCheck();
+        data[size] = element;
+        size++;
+        return true;
+    }
+
     //додаємо елемент у вказане місце, переміщачи всі елементи на один в право
     @Override
     public <T extends E> void add(int index, T element) {
@@ -186,6 +180,9 @@ public class ArrayList<E> implements List<E> {
             GROW_CAPACITY = GROW_CAPACITY + (GROW_CAPACITY >> 1);
             if (GROW_CAPACITY < 0) {
                 throw new OutOfMemoryError();
+            }
+            if (GROW_CAPACITY == 0){
+                GROW_CAPACITY = DEFAULT_CAPACITY;
             }
             data = Arrays.copyOf(data, GROW_CAPACITY);
         }
