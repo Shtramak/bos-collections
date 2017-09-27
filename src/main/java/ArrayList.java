@@ -32,15 +32,29 @@ public class ArrayList<E> implements List<E> {
     public Iterator<E> iterator() {
         return new Iterator<E>() {
             int index = 0;
+            int lastReturn = -1;
 
             @Override
             public boolean hasNext() {
-                return (size - index > 0);
+                return index < size;
             }
 
             @Override
             public E next() {
-                return data[index++];
+                if(index >= size){
+                    throw new IndexOutOfBoundsException();
+                }
+                lastReturn = index;
+                index++;
+                return ArrayList.this.get(lastReturn);
+            }
+
+            @Override
+            public void remove() {
+                if(lastReturn<0) throw new IllegalStateException();
+                ArrayList.this.remove(lastReturn);
+                index = lastReturn;
+                lastReturn--;
             }
         };
     }
