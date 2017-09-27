@@ -22,27 +22,18 @@ public class ArrayListTest {
         strings.add("String1");
         strings.add("String2");
         strings.add("String3");
+
         integers = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
             integers.add(i);
         }
+
         emptyList = new ArrayList<>(0);
+
         testStringList = new ArrayList<>();
         testStringList.add("test1");
         testStringList.add("test2");
         testStringList.add("test3");
-
-        strings = new ArrayList<>();
-        strings.add("String1");
-        strings.add("String2");
-        strings.add("String3");
-
-        integers = new ArrayList<>();
-        for (int i = 0; i < 15; i++) {
-            integers.add(i);
-        }
-
-        emptyList = new ArrayList<>(0);
     }
 
     @Test
