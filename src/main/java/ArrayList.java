@@ -1,6 +1,5 @@
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 public class ArrayList<E> implements List<E> {
     private static final int DEFAULT_CAPACITY = 10;
@@ -31,37 +30,39 @@ public class ArrayList<E> implements List<E> {
         return size == 0;
     }
 
+    /*
+     SHTRAMAK: Немає необхідності у створенні окремого внутрішнього класу який би реалізовував інтерфейс Iterator,
+     оскільки більше ніде не потрібне посилання на нього, тому повертаємо реалізацію анонімного класу.
+     */
     @Override
     public Iterator<E> iterator() {
-        return new Iter();
-    }
+        return new Iterator<E>() {
+            int index = 0;
+            int lastReturn = -1;
 
-    private class Iter implements Iterator<E> {
-        int cursor = 0;
-        int lastReturn = -1;
-
-        @Override
-        public boolean hasNext() {
-            return cursor != size;
-        }
-
-        @Override
-        public E next() {
-            if(cursor >= size){
-                throw new NoSuchElementException();
+            @Override
+            public boolean hasNext() {
+                return index < size;
             }
-            lastReturn = cursor;
-            cursor++;
-            return ArrayList.this.get(lastReturn);
-        }
 
-        @Override
-        public void remove() {
-            if(lastReturn<0) throw new IllegalStateException();
-            ArrayList.this.remove(lastReturn);
-            cursor = lastReturn;
-            lastReturn--;
-        }
+            @Override
+            public E next() {
+                if(index >= size){
+                    throw new IndexOutOfBoundsException();
+                }
+                lastReturn = index;
+                index++;
+                return ArrayList.this.get(lastReturn);
+            }
+
+            @Override
+            public void remove() {
+                if(lastReturn<0) throw new IllegalStateException();
+                ArrayList.this.remove(lastReturn);
+                index = lastReturn;
+                lastReturn--;
+            }
+        };
     }
 
     @Override
@@ -105,10 +106,16 @@ public class ArrayList<E> implements List<E> {
         return data[index];
     }
 
+    /*
+     SHTRAMAK: Оскільки є привязка до повідомлення, то і на кожну перевірку варто викидати своє
+    */
     //Перевірка не вийшов індекс за межі колекції
     private void rangeCheck(int index) {
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("get index =" + index + "but array size = " + size);
+        if (index > size) {
+            throw new IndexOutOfBoundsException("index =" + index + ", but array size = " + size);
+        }
+        if (index < 0) {
+            throw new IndexOutOfBoundsException("index =" + index + ", but must be positive");
         }
     }
 
@@ -123,6 +130,7 @@ public class ArrayList<E> implements List<E> {
 
     //Вилучення елементу по індексу
 
+    /*SHTRAMAK: згодний*/
     //Є окремий метод rangeCheck(index) перевірка індексу в ньому.
     // Лишив свою реалізацію, окрім перевірки (numMoved > 0)
     @Override
@@ -174,6 +182,10 @@ public class ArrayList<E> implements List<E> {
         size++;
     }
 
+    /*
+    SHTRAMAK: Збільшення відбувається не у 2 рази, а у 1.5, оскільки "GROW_CAPACITY >> 1" є аналогом ділення на 2,
+    для випадку бітового зсуву вправо "GROW_CAPACITY << 1" збільшення відповідно було б у 3 рази
+    */
     //перевіряємо вмістимість масива, якщо достигли максимуму збільшуємо в 2-ва ризи
     private void capacityCheck() {
         if (GROW_CAPACITY <= size + 1) {
