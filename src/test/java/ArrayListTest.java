@@ -53,8 +53,13 @@ public class ArrayListTest {
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void addWithIndexOutOfBoundsExceptionTest() {
-        strings.add(-1, "Test22");
+    public void testAddWithIndexOutOfBoundsException() {
+        try {
+            strings.add(-1, "Test22");
+            fail(); // if no exception was thrown
+        } catch (IndexOutOfBoundsException e) {
+            //Catch exception and go forward to check next step
+        }
         strings.add(22, "Test22");
     }
 
@@ -113,14 +118,16 @@ public class ArrayListTest {
         assertEquals(expectedIntToString, integers.toString());
     }
 
-    /*
-    SHTRAMAK: до тесту strings.remove(-1), та emptyList.remove(0) не дійде, перевірка тесту завершиться на стадії
-    strings.remove(10), після того, як метод викине виключення IndexOutOfBoundsException, і завершиться успіхом
-    */
     @Test(expected = IndexOutOfBoundsException.class)
     public void testRemoveByIndexIndexOutOfBoundsException() {
-        strings.remove(10);
-        strings.remove(-1);
+        try {
+            strings.remove(10);
+            fail();
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
+        try {
+            strings.remove(-1);
+            fail();
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
         emptyList.remove(0);
     }
 
@@ -135,13 +142,13 @@ public class ArrayListTest {
         assertEquals("string1", strings.get(0));
     }
 
-    /*
-    SHTRAMAK: перевірка другої умови assertEquals не відбудеться. Для чого тут взагалі "assertEquals"? Копіпаст )
-    */
     @Test(expected = IndexOutOfBoundsException.class)
     public void testGetIndexOutOfBoundsException() {
-        assertEquals("string1", strings.get(10));
-        assertEquals("string1", strings.get(-1));
+        try {
+            strings.get(10);
+            fail();
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
+        strings.get(-1);
     }
 
     @Test
@@ -150,12 +157,12 @@ public class ArrayListTest {
         assertEquals("[testSet, string2, string3]", strings.toString());
     }
 
-    /*
-    SHTRAMAK: перевірка друго виклику методу set не відбудеться.
-    */
     @Test(expected = IndexOutOfBoundsException.class)
     public void testSetIndexOutOfBoundsException() {
-        strings.set(10, "testSet");
+        try {
+            strings.set(10, "testSet");
+            fail();
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
         strings.set(-1, "testSet");
     }
 

@@ -18,22 +18,16 @@ public class ArrayList<E> implements List<E> {
         GROW_CAPACITY = size;
     }
 
-    //Повернення розміру колекції
     @Override
     public int size() {
         return size;
     }
 
-    //Перевірка колекції на наявність елементів
     @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
-    /*
-     SHTRAMAK: Немає необхідності у створенні окремого внутрішнього класу який би реалізовував інтерфейс Iterator,
-     оскільки більше ніде не потрібне посилання на нього, тому повертаємо реалізацію анонімного класу.
-     */
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
@@ -74,7 +68,7 @@ public class ArrayList<E> implements List<E> {
     public <T extends E> boolean remove(T element) {
         if (element == null) {
             for (int index = 0; index < size; index++) {
-                if (data[0] == null) {
+                if (data[index] == null) {
                     remove(index);
                     return true;
                 }
@@ -90,7 +84,6 @@ public class ArrayList<E> implements List<E> {
         return false;
     }
 
-    //переводим ArrayList в масив
     @Override
     @SuppressWarnings("unchecked")
     public E[] toArray() {
@@ -99,17 +92,12 @@ public class ArrayList<E> implements List<E> {
         return result;
     }
 
-    //Повернення елементу колекції по індексу
     @Override
     public E get(int index) {
         rangeCheck(index);
         return data[index];
     }
 
-    /*
-     SHTRAMAK: Оскільки є привязка до повідомлення, то і на кожну перевірку варто викидати своє
-    */
-    //Перевірка не вийшов індекс за межі колекції
     private void rangeCheck(int index) {
         if (index > size) {
             throw new IndexOutOfBoundsException("index =" + index + ", but array size = " + size);
@@ -119,7 +107,6 @@ public class ArrayList<E> implements List<E> {
         }
     }
 
-    //Заміняємо елемент по індексу
     @Override
     public <T extends E> E set(int index, T element) {
         rangeCheck(index);
@@ -127,12 +114,6 @@ public class ArrayList<E> implements List<E> {
         data[index] = element;
         return oldObject;
     }
-
-    //Вилучення елементу по індексу
-
-    /*SHTRAMAK: згодний*/
-    //Є окремий метод rangeCheck(index) перевірка індексу в ньому.
-    // Лишив свою реалізацію, окрім перевірки (numMoved > 0)
     @Override
     public E remove(int index) {
         rangeCheck(index);
@@ -143,8 +124,6 @@ public class ArrayList<E> implements List<E> {
         return oldValue;
     }
 
-    //шукаємо елемнент в смасиві, якщо знайшли то виртаємо його ІНДЕКС
-    //якщо не знайшли то -1
     @Override
     public <T extends E> int indexOf(T element) {
         if (element == null) {
@@ -163,7 +142,6 @@ public class ArrayList<E> implements List<E> {
         return -1;
     }
 
-    //Додавання нового елементу в кінець
     @Override
     public <T extends E> boolean add(T element) {
         capacityCheck();
@@ -172,7 +150,6 @@ public class ArrayList<E> implements List<E> {
         return true;
     }
 
-    //додаємо елемент у вказане місце, переміщачи всі елементи на один в право
     @Override
     public <T extends E> void add(int index, T element) {
         rangeCheck(index);
@@ -182,11 +159,6 @@ public class ArrayList<E> implements List<E> {
         size++;
     }
 
-    /*
-    SHTRAMAK: Збільшення відбувається не у 2 рази, а у 1.5, оскільки "GROW_CAPACITY >> 1" є аналогом ділення на 2,
-    для випадку бітового зсуву вправо "GROW_CAPACITY << 1" збільшення відповідно було б у 3 рази
-    */
-    //перевіряємо вмістимість масива, якщо достигли максимуму збільшуємо в 2-ва ризи
     private void capacityCheck() {
         if (GROW_CAPACITY <= size + 1) {
             GROW_CAPACITY = GROW_CAPACITY + (GROW_CAPACITY >> 1);
@@ -200,13 +172,11 @@ public class ArrayList<E> implements List<E> {
         }
     }
 
-    //Очистка колекції
     @Override
     public void clear() {
         for (int index = 0; index < size ; index++) {
             data[index] = null;
         }
-
         size = 0;
     }
 
