@@ -1,5 +1,7 @@
 import java.util.Iterator;
 
+// yura_bart: remove(T), toArray, get, set
+
 public class LinkedList<E> implements List<E> {
     private Node<E> first;
     private Node<E> last;
@@ -81,9 +83,14 @@ public class LinkedList<E> implements List<E> {
         return false;
     }
 
+    //Конвертація колекції у масив
     @Override
     public E[] toArray() {
-        return (E[]) new Object[0];
+        E[] result = (E[]) new Object[size];
+        int i = 0;
+        for (Node<E> x = first; x != null; x = x.next)
+            result[i++] = x.item;
+        return result;
     }
 
     @Override
@@ -91,8 +98,24 @@ public class LinkedList<E> implements List<E> {
         return false;
     }
 
+    //Видалення з масиву першого конкретного елементу
     @Override
     public <T extends E> boolean remove(T element) {
+        if (element == null) {
+            for (Node<E> x = first; x != null; x = x.next) {
+                if (x.item == null) {
+                    unlink(x);
+                    return true;
+                }
+            }
+        } else {
+            for (Node<E> x = first; x != null; x = x.next) {
+                if (element.equals(x.item)) {
+                    unlink(x);
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -111,14 +134,22 @@ public class LinkedList<E> implements List<E> {
         return null;
     }
 
+    //Отримання елементу колекції по індексу
     @Override
     public E get(int index) {
-        return null;
+        rangeCheck(index);
+
+        return node(index).item;
     }
 
+    //Вставка по індексу конкретного елементу, метод повертає старий елемент
     @Override
     public <T extends E> E set(int index, T element) {
-        return null;
+        rangeCheck(index);
+        Node<E> x = node(index);
+        E oldItem = x.item;
+        x.item = element;
+        return oldItem;
     }
 
     @Override
@@ -129,5 +160,12 @@ public class LinkedList<E> implements List<E> {
     @Override
     public <T extends E> int indexOf(T element) {
         return 0;
+    }
+
+    //Перевірка чи індекс виходить за межі колекції
+    private void rangeCheck(int index) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("get index =" + index + "but array size = " + size);
+        }
     }
 }
