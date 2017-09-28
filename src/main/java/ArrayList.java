@@ -1,6 +1,5 @@
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 public class ArrayList<E> implements List<E> {
     private static final int DEFAULT_CAPACITY = 10;
@@ -16,8 +15,7 @@ public class ArrayList<E> implements List<E> {
     public ArrayList(int size) {
         if (size < 0) throw new IllegalArgumentException("Argument must be positive. Entered argument:" + size);
         data = (E[]) new Object[size];
-        GROW_CAPACITY = size;
-
+        GROW_CAPACITY=size;
     }
 
     @Override
@@ -32,35 +30,33 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new Iter();
-    }
+        return new Iterator<E>() {
+            int index = 0;
+            int lastReturn = -1;
 
-    private class Iter implements Iterator<E> {
-        int cursor = 0;
-        int lastReturn = -1;
-
-        @Override
-        public boolean hasNext() {
-            return cursor != size;
-        }
-
-        @Override
-        public E next() {
-            if (cursor >= size) {
-                throw new NoSuchElementException();
+            @Override
+            public boolean hasNext() {
+                return index < size;
             }
-            lastReturn = cursor;
-            cursor++;
-            return ArrayList.this.get(lastReturn);
-        }
 
-        @Override
-        public void remove() {
-            if (lastReturn < 0) throw new IllegalStateException();
-            ArrayList.this.remove(lastReturn);
-            cursor = lastReturn;
-            lastReturn--;
-        }
+            @Override
+            public E next() {
+                if(index >= size){
+                    throw new IndexOutOfBoundsException();
+                }
+                lastReturn = index;
+                index++;
+                return ArrayList.this.get(lastReturn);
+            }
+
+            @Override
+            public void remove() {
+                if(lastReturn<0) throw new IllegalStateException();
+                ArrayList.this.remove(lastReturn);
+                index = lastReturn;
+                lastReturn--;
+            }
+        };
     }
 
     @Override
@@ -99,6 +95,7 @@ public class ArrayList<E> implements List<E> {
     @Override
     public E get(int index) {
         rangeCheck(index);
+
         return data[index];
     }
 
@@ -115,13 +112,14 @@ public class ArrayList<E> implements List<E> {
         data[index] = element;
         return oldObject;
     }
-
     @Override
     public E remove(int index) {
         rangeCheck(index);
 
         E oldValue = data[index];
-        System.arraycopy(data, index + 1, data, index, size - index);
+        int numMoved = size - index - 1;
+        if (numMoved > 0)
+            System.arraycopy(data, index + 1, data, index, numMoved);
         data[--size] = null;
         return oldValue;
     }
@@ -163,12 +161,9 @@ public class ArrayList<E> implements List<E> {
 
     private void capacityCheck() {
         if (GROW_CAPACITY <= size + 1) {
-            GROW_CAPACITY = GROW_CAPACITY + (GROW_CAPACITY >> 1) + 1;
+            GROW_CAPACITY = GROW_CAPACITY + (GROW_CAPACITY >> 1)+1;
             if (GROW_CAPACITY < 0) {
                 throw new OutOfMemoryError();
-            }
-            if (GROW_CAPACITY == 0) {
-                GROW_CAPACITY = DEFAULT_CAPACITY;
             }
             data = Arrays.copyOf(data, GROW_CAPACITY);
         }
@@ -176,7 +171,7 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public void clear() {
-        for (int index = 0; index < size; index++) {
+        for (int index = 0; index < size ; index++) {
             data[index] = null;
         }
         size = 0;
@@ -184,13 +179,13 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public String toString() {
-        if (size == 0) return "[]";
+        if (size==0) return "[]";
         StringBuilder result = new StringBuilder("[");
-        for (int i = 0; i < size; i++) {
+        for (int i=0;i<size;i++){
             result.append(data[i]).append(", ");
         }
         int startIndex = result.lastIndexOf(", ");
-        result.replace(startIndex, result.length(), "]");
+        result.replace(startIndex,result.length(),"]");
         return result.toString();
     }
 }
