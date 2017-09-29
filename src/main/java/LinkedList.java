@@ -95,7 +95,16 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public <T extends E> boolean add(T element) {
-        return false;
+        Node<E> tmp = last;
+        Node<E> newNode = new Node<>(tmp, element, null);
+        last = newNode;
+        if (tmp == null) {
+            first = newNode;
+        } else {
+            tmp.next = newNode;
+        }
+        size++;
+        return true;
     }
 
     //Видалення з масиву першого конкретного елементу
