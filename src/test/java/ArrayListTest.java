@@ -1,7 +1,8 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
 
 import static org.junit.Assert.*;
 
@@ -9,35 +10,32 @@ public class ArrayListTest {
     private List<String> strings;
     private List<Integer> integers;
     private List<Object> emptyList;
-    private List<String> testStringList;
 
 
     @Before
     public void init() {
         strings = new ArrayList<>();
-        strings.add("String1");
-        strings.add("String2");
-        strings.add("String3");
+        strings.add("string1");
+        strings.add("string2");
+        strings.add("string3");
         integers = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
             integers.add(i);
         }
         emptyList = new ArrayList<>(0);
-        testStringList = new ArrayList<>();
-        testStringList.add("test1");
-        testStringList.add("test2");
-        testStringList.add("test3");
     }
 
     @Test
     public void testAddByIndexString() {
-        testStringList.add(0, "test0");
-        testStringList.add(2, "test2");
-        testStringList.add(5, "test5");
+        strings.add(0, "string0");
+        strings.add(2, "string2");
+        strings.add(5, "string5");
 
-        String expected = "[test0, test1, test2, test2, test3, test5]";
-        assertEquals(expected, testStringList.toString());
+        String expected = "[string0, string1, string2, string2, string3, string5]";
+        assertEquals(expected, strings.toString());
     }
+
+
 
     @Test
     public void testAddByIndexInteger() {
@@ -58,17 +56,22 @@ public class ArrayListTest {
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void addWithIndexOutOfBoundsExceptionTest() {
-        testStringList.add(-1, "Test22");
-        testStringList.add(22, "Test22");
+    public void testAddWithIndexOutOfBoundsException() {
+        try {
+            strings.add(-1, "Test22");
+            fail(); // if no exception was thrown
+        } catch (IndexOutOfBoundsException e) {
+            //Catch exception and go forward to check next step
+        }
+        strings.add(22, "Test22");
     }
 
     @Test
     public void testAddString() {
-        testStringList.add("test4");
+        strings.add("string4");
 
-        String expected = "[test1, test2, test3, test4]";
-        assertEquals(expected, testStringList.toString());
+        String expected = "[string1, string2, string3, string4]";
+        assertEquals(expected, strings.toString());
     }
 
     @Test
@@ -82,22 +85,22 @@ public class ArrayListTest {
     @Test
     public void testAddEmptyList() {
         emptyList.add(1);
-        emptyList.add("test5");
+        emptyList.add("string5");
 
-        String expected = "[1, test5]";
+        String expected = "[1, string5]";
         assertEquals(expected, emptyList.toString());
     }
 
     @Test
     public void testRemoveByElementTrue() {
-        boolean expected = testStringList.remove("test2");
+        boolean expected = strings.remove("string2");
         assertTrue(expected);
     }
 
     @Test
     public void testRemoveByElementFalse() {
-        boolean expectedListStringRemove = testStringList.remove("noElement");
-        boolean expectedListStringRemoveNull = testStringList.remove(null);
+        boolean expectedListStringRemove = strings.remove("noElement");
+        boolean expectedListStringRemoveNull = strings.remove(null);
         boolean expectedEmpty = emptyList.remove("noElement");
         assertFalse(expectedListStringRemove);
         assertFalse(expectedListStringRemoveNull);
@@ -106,13 +109,13 @@ public class ArrayListTest {
 
     @Test
     public void testRemoveByIndex() {
-        String expectedString = testStringList.remove(1);
+        String expectedString = strings.remove(1);
         int expectedInt = integers.remove(2);
 
-        assertEquals("test2", expectedString);
+        assertEquals("string2", expectedString);
         assertEquals(2, expectedInt);
-        String expectedStrToString = "[test1, test3]";
-        assertEquals(expectedStrToString, testStringList.toString());
+        String expectedStrToString = "[string1, string3]";
+        assertEquals(expectedStrToString, strings.toString());
 
         String expectedIntToString = "[0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]";
         assertEquals(expectedIntToString, integers.toString());
@@ -120,38 +123,50 @@ public class ArrayListTest {
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void testRemoveByIndexIndexOutOfBoundsException() {
-        testStringList.remove(10);
-        testStringList.remove(-1);
+        try {
+            strings.remove(10);
+            fail();
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
+        try {
+            strings.remove(-1);
+            fail();
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
         emptyList.remove(0);
     }
 
     @Test
     public void testToArray() {
-        String expected = "[test1, test2, test3]";
-        assertEquals(expected, Arrays.toString(testStringList.toArray()));
+        String expected = "[string1, string2, string3]";
+        assertEquals(expected, Arrays.toString(strings.toArray()));
     }
 
     @Test
     public void testGet() {
-        assertEquals("test1", testStringList.get(0));
+        assertEquals("string1", strings.get(0));
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void testGetIndexOutOfBoundsException() {
-        assertEquals("test1", testStringList.get(10));
-        assertEquals("test1", testStringList.get(-1));
+        try {
+            strings.get(10);
+            fail();
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
+        strings.get(-1);
     }
 
     @Test
     public void testSet() {
-        assertEquals("test1", testStringList.set(0, "testSet"));
-        assertEquals("[testSet, test2, test3]", testStringList.toString());
+        assertEquals("string1", strings.set(0, "testSet"));
+        assertEquals("[testSet, string2, string3]", strings.toString());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void testSetIndexOutOfBoundsException() {
-        testStringList.set(10, "testSet");
-        testStringList.set(-1, "testSet");
+        try {
+            strings.set(10, "testSet");
+            fail();
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
+        strings.set(-1, "testSet");
     }
 
     @Test
@@ -180,7 +195,7 @@ public class ArrayListTest {
 
     @Test
     public void testIterator() {
-        String stringsToString = "[String1, String2, String3]";
+        String stringsToString = "[string1, string2, string3]";
         String integersToString = "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]";
         String emptyListToString = "[]";
         assertEquals(stringsToString, iteratorToString(strings));
@@ -192,7 +207,7 @@ public class ArrayListTest {
     @Test
     public void testContains() {
         assertTrue(integers.contains(7));
-        assertTrue(strings.contains("String3"));
+        assertTrue(strings.contains("string3"));
         assertFalse(strings.contains("String4"));
         assertFalse(emptyList.contains("bla-bla"));
     }
@@ -212,14 +227,14 @@ public class ArrayListTest {
 
     @Test
     public void testIndexOf() {
-        int actual = testStringList.indexOf("test1");
+        int actual = strings.indexOf("string1");
 
         assertEquals(0, actual);
     }
 
     @Test
     public void testIndexOfNoElement() {
-        int actual = testStringList.indexOf("Error");
+        int actual = strings.indexOf("Error");
 
         assertEquals(-1, actual);
     }
