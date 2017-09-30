@@ -197,7 +197,6 @@ public class ArrayListTest {
     }
 */
 
-/*
     @Test
     public void testSize() {
         assertEquals(3, strings.size());
@@ -205,25 +204,11 @@ public class ArrayListTest {
         assertEquals(0, emptyList.size());
     }
 
-*/
-/*
     @Test
     public void testIsEmpty() {
         assertTrue(emptyList.isEmpty());
         assertFalse(strings.isEmpty());
         assertFalse(integers.isEmpty());
-    }
-*/
-
-   /* @Test
-    public void testIterator() {
-        String stringsToString = "[string1, string2, string3]";
-        String integersToString = "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]";
-        String emptyListToString = "[]";
-        assertEquals(stringsToString, iteratorToString(strings));
-        assertEquals(integersToString, iteratorToString(integers));
-        assertEquals(emptyListToString, iteratorToString(emptyList));
-
     }
 
     @Test
@@ -232,6 +217,17 @@ public class ArrayListTest {
         assertTrue(strings.contains("string3"));
         assertFalse(strings.contains("String4"));
         assertFalse(emptyList.contains("bla-bla"));
+    }
+
+    @Test
+    public void testIterator() {
+        String stringsToString = "[string1, string2, string3]";
+        String integersToString = "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]";
+        String emptyListToString = "[]";
+        assertEquals(stringsToString, iteratorToString(strings));
+        assertEquals(integersToString, iteratorToString(integers));
+        assertEquals(emptyListToString, iteratorToString(emptyList));
+
     }
 
     private <E> String iteratorToString(List<E> list) {
@@ -247,7 +243,7 @@ public class ArrayListTest {
         return result.toString().trim();
     }
 
-    @Test
+    /*@Test
     public void testIndexOf() {
         int actual = strings.indexOf("string1");
 

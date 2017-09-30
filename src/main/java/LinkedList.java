@@ -1,6 +1,5 @@
 import java.util.Iterator;
-
-// yura_bart: remove(T), toArray, get, set
+import java.util.NoSuchElementException;
 
 public class LinkedList<E> implements List<E> {
     private Node<E> first;
@@ -67,20 +66,22 @@ public class LinkedList<E> implements List<E> {
 
 
 
-
+//    довжина LinkedList
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
+//  метод вертая true якщо List порожній
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
+    //метод вертая true якщо в List знайдено заданий елемент
     @Override
     public <T extends E> boolean contains(T element) {
-        return false;
+        return indexOf(element) != -1;
     }
 
     //Конвертація колекції у масив
@@ -140,7 +141,40 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Iterator<E>(){
+            private Node<E> lastReturned;
+            private Node<E> next = first;
+            private int nextIndex = 0;
+
+            @Override
+            public boolean hasNext() {
+                return nextIndex < size();
+            }
+
+            @Override
+            public E next() {
+                if(!hasNext()) throw new NoSuchElementException();
+                lastReturned = next;
+                next = lastReturned.next;
+                nextIndex++;
+                return  lastReturned.item;
+            }
+
+            @Override
+            public void remove() {
+                if(lastReturned == null) throw new IllegalStateException();
+
+                Node<E> lastNext = lastReturned.next;
+                unlink(lastReturned);
+
+                if (next == lastReturned)
+                    next = lastNext;
+                else
+                    nextIndex--;
+
+                lastReturned = null;
+            }
+        };
     }
 
     //Отримання елементу колекції по індексу
