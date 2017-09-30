@@ -29,7 +29,7 @@ public class LinkedListTest {
         strings.add("string4");
 
         String expected = "[string1, string2, string3, string4]";
-        assertEquals(expected,  Arrays.toString(strings.toArray()));
+        assertEquals(expected, strings.toString());
     }
 
     @Test
@@ -37,7 +37,7 @@ public class LinkedListTest {
         integers.add(100);
 
         String expected = "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 100]";
-        assertEquals(expected,  Arrays.toString(integers.toArray()));
+        assertEquals(expected, integers.toString());
     }
 
     @Test
@@ -46,7 +46,7 @@ public class LinkedListTest {
         emptyList.add("string5");
 
         String expected = "[1, string5]";
-        assertEquals(expected,  Arrays.toString(emptyList.toArray()));
+        assertEquals(expected, emptyList.toString());
     }
 
     @Test
@@ -63,6 +63,57 @@ public class LinkedListTest {
         assertFalse(expectedListStringRemove);
         assertFalse(expectedListStringRemoveNull);
         assertFalse(expectedEmpty);
+    }
+
+    @Test
+    public void testRemoveByIndex() {
+        String expectedString = strings.remove(1);
+        int expectedInt = integers.remove(2);
+
+        assertEquals("string2", expectedString);
+        assertEquals(2, expectedInt);
+        String expectedStrToString = "[string1, string3]";
+        assertEquals(expectedStrToString, strings.toString());
+
+        String expectedIntToString = "[0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]";
+        assertEquals(expectedIntToString, integers.toString());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testRemoveByIndexIndexOutOfBoundsException() {
+        try {
+            strings.remove(10);
+            fail();
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
+        try {
+            strings.remove(-1);
+            fail();
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
+        emptyList.remove(0);
+    }
+
+    @Test
+    public void testClear() {
+        strings.clear();
+        assertEquals("[]", strings.toString());
+        integers.clear();
+        assertEquals("[]", integers.toString());
+        emptyList.clear();
+        assertEquals("[]", emptyList.toString());
+    }
+
+    @Test
+    public void testIndexOf() {
+        int actual = strings.indexOf("string1");
+
+        assertEquals(0, actual);
+    }
+
+    @Test
+    public void testIndexOfNoElement() {
+        int actual = strings.indexOf("Error");
+
+        assertEquals(-1, actual);
     }
 
     @Test
