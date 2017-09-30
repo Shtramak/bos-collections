@@ -94,14 +94,17 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public E get(int index) {
-       rangeCheck(index);
+        rangeCheck(index);
 
-       return data[index];
+        return data[index];
     }
 
     private void rangeCheck(int index) {
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("get index =" + index + "but array size = " + size);
+        if (index > size) {
+            throw new IndexOutOfBoundsException("index =" + index + ", but array size = " + size);
+        }
+        if (index < 0) {
+            throw new IndexOutOfBoundsException("index =" + index + ", but must be positive");
         }
     }
 
@@ -119,7 +122,7 @@ public class ArrayList<E> implements List<E> {
         E oldValue = data[index];
         int numMoved = size - index - 1;
         if (numMoved > 0)
-        System.arraycopy(data, index + 1, data, index, numMoved);
+            System.arraycopy(data, index + 1, data, index, numMoved);
         data[--size] = null;
         return oldValue;
     }
