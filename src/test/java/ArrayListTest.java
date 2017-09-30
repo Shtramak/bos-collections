@@ -14,18 +14,17 @@ public class ArrayListTest {
 
     @Before
     public void init() {
-        strings = new LinkedList<>();    //ТУТ ІНІЦІАЛІЗУЄМО ЯК LinkedList
+        strings = new ArrayList<>();
         strings.add("string1");
         strings.add("string2");
         strings.add("string3");
-        integers = new LinkedList<>();
+        integers = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
             integers.add(i);
         }
-        emptyList = new LinkedList<>();
+        emptyList = new ArrayList<>(0);
     }
 
-/*
     @Test
     public void testAddByIndexString() {
         strings.add(0, "string0");
@@ -35,11 +34,9 @@ public class ArrayListTest {
         String expected = "[string0, string1, string2, string2, string3, string5]";
         assertEquals(expected, strings.toString());
     }
-*/
 
 
 
-/*
     @Test
     public void testAddByIndexInteger() {
         integers.add(0, 100);
@@ -49,9 +46,7 @@ public class ArrayListTest {
         String expected = "[100, 0, 1, 2, 3, 4, 5, 112, 6, 7, 8, 9, 10, 11, 12, 13, 14, 115]";
         assertEquals(expected, integers.toString());
     }
-*/
 
-/*
     @Test
     public void testAddByIndexEmptyList() {
         emptyList.add(0, 100);
@@ -59,9 +54,7 @@ public class ArrayListTest {
         String expected = "[100]";
         assertEquals(expected, emptyList.toString());
     }
-*/
 
-/*
     @Test(expected = IndexOutOfBoundsException.class)
     public void testAddWithIndexOutOfBoundsException() {
         try {
@@ -72,14 +65,13 @@ public class ArrayListTest {
         }
         strings.add(22, "Test22");
     }
-*/
 
     @Test
     public void testAddString() {
         strings.add("string4");
 
         String expected = "[string1, string2, string3, string4]";
-        assertEquals(expected,  Arrays.toString(strings.toArray()));
+        assertEquals(expected, strings.toString());
     }
 
     @Test
@@ -87,7 +79,7 @@ public class ArrayListTest {
         integers.add(100);
 
         String expected = "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 100]";
-        assertEquals(expected,  Arrays.toString(integers.toArray()));
+        assertEquals(expected, integers.toString());
     }
 
     @Test
@@ -96,7 +88,7 @@ public class ArrayListTest {
         emptyList.add("string5");
 
         String expected = "[1, string5]";
-        assertEquals(expected,  Arrays.toString(emptyList.toArray()));
+        assertEquals(expected, emptyList.toString());
     }
 
     @Test
@@ -115,7 +107,6 @@ public class ArrayListTest {
         assertFalse(expectedEmpty);
     }
 
-/*
     @Test
     public void testRemoveByIndex() {
         String expectedString = strings.remove(1);
@@ -129,26 +120,19 @@ public class ArrayListTest {
         String expectedIntToString = "[0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]";
         assertEquals(expectedIntToString, integers.toString());
     }
-*/
 
-/*
     @Test(expected = IndexOutOfBoundsException.class)
     public void testRemoveByIndexIndexOutOfBoundsException() {
         try {
             strings.remove(10);
             fail();
-        } catch (IndexOutOfBoundsException e) {*/
-/*NOP*//*
-}
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
         try {
             strings.remove(-1);
             fail();
-        } catch (IndexOutOfBoundsException e) {*/
-/*NOP*//*
-}
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
         emptyList.remove(0);
     }
-*/
 
     @Test
     public void testToArray() {
@@ -173,7 +157,7 @@ public class ArrayListTest {
     @Test
     public void testSet() {
         assertEquals("string1", strings.set(0, "testSet"));
-        assertEquals("[testSet, string2, string3]",  Arrays.toString(strings.toArray()));
+        assertEquals("[testSet, string2, string3]", strings.toString());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -185,7 +169,6 @@ public class ArrayListTest {
         strings.set(-1, "testSet");
     }
 
-/*
     @Test
     public void testClear() {
         strings.clear();
@@ -195,9 +178,7 @@ public class ArrayListTest {
         emptyList.clear();
         assertEquals("[]", emptyList.toString());
     }
-*/
 
-/*
     @Test
     public void testSize() {
         assertEquals(3, strings.size());
@@ -205,17 +186,14 @@ public class ArrayListTest {
         assertEquals(0, emptyList.size());
     }
 
-*/
-/*
     @Test
     public void testIsEmpty() {
         assertTrue(emptyList.isEmpty());
         assertFalse(strings.isEmpty());
         assertFalse(integers.isEmpty());
     }
-*/
 
-   /* @Test
+    @Test
     public void testIterator() {
         String stringsToString = "[string1, string2, string3]";
         String integersToString = "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]";
@@ -259,5 +237,5 @@ public class ArrayListTest {
         int actual = strings.indexOf("Error");
 
         assertEquals(-1, actual);
-    }*/
+    }
 }
