@@ -1,6 +1,12 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+// yura_bart: remove(T), toArray, get, set
+
+//shtramak: add, remove(int), indexOf, add(int, T), clear
+
+//victor: size, isEmpty, iterator, contains
+
 public class LinkedList<E> implements List<E> {
     private Node<E> first;
     private Node<E> last;
@@ -65,14 +71,13 @@ public class LinkedList<E> implements List<E> {
     }
 
 
-
-//    довжина LinkedList
+    //    довжина LinkedList
     @Override
     public int size() {
         return size;
     }
 
-//  метод вертая true якщо List порожній
+    //  метод вертая true якщо List порожній
     @Override
     public boolean isEmpty() {
         return size == 0;
@@ -96,14 +101,13 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public <T extends E> boolean add(T element) {
-        Node<E> tmp = last;
-        Node<E> newNode = new Node<>(tmp, element, null);
+        Node<E> l = last;
+        Node<E> newNode = new Node<>(l, element, null);
         last = newNode;
-        if (tmp == null) {
+        if (l == null)
             first = newNode;
-        } else {
-            tmp.next = newNode;
-        }
+        else
+            l.next = newNode;
         size++;
         return true;
     }
@@ -131,17 +135,46 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public <T extends E> void add(int index, T element) {
+        if (index < 0 || index > size)
+            throw new IndexOutOfBoundsException("index " + index + " is out of bounds");
 
+        if (index == size) {
+            Node<E> l = last;
+            Node<E> newNode = new Node<>(l, element, null);
+            last = newNode;
+            if (l == null)
+                first = newNode;
+            else
+                l.next = newNode;
+            size++;
+        } else {
+            Node<E> pred = node(index).prev;
+            Node<E> newNode = new Node<>(pred, element, node(index));
+            node(index).prev = newNode;
+            if (pred == null)
+                first = newNode;
+            else
+                pred.next = newNode;
+            size++;
+        }
     }
 
     @Override
     public void clear() {
-
+        for (Node<E> x = first; x != null; ) {
+            Node<E> next = x.next;
+            x.item = null;
+            x.next = null;
+            x.prev = null;
+            x = next;
+        }
+        first = last = null;
+        size = 0;
     }
 
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<E>(){
+        return new Iterator<E>() {
             private Node<E> lastReturned;
             private Node<E> next = first;
             private int nextIndex = 0;
@@ -153,16 +186,16 @@ public class LinkedList<E> implements List<E> {
 
             @Override
             public E next() {
-                if(!hasNext()) throw new NoSuchElementException();
+                if (!hasNext()) throw new NoSuchElementException();
                 lastReturned = next;
                 next = lastReturned.next;
                 nextIndex++;
-                return  lastReturned.item;
+                return lastReturned.item;
             }
 
             @Override
             public void remove() {
-                if(lastReturned == null) throw new IllegalStateException();
+                if (lastReturned == null) throw new IllegalStateException();
 
                 Node<E> lastNext = lastReturned.next;
                 unlink(lastReturned);
@@ -197,12 +230,41 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public E remove(int index) {
-        return null;
+        if (index < 0 || index > size || size == 0)
+            throw new IndexOutOfBoundsException("index " + index + " is out of bounds");
+
+        return unlink(node(index));
     }
 
     @Override
     public <T extends E> int indexOf(T element) {
-        return 0;
+        int index = 0;
+        if (element == null) {
+            for (Node<E> x = first; x != null; x = x.next) {
+                if (x.item == null)
+                    return index;
+                index++;
+            }
+        } else {
+            for (Node<E> x = first; x != null; x = x.next) {
+                if (element.equals(x.item))
+                    return index;
+                index++;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public String toString() {
+        if (size == 0) return "[]";
+        StringBuilder result = new StringBuilder("[");
+        for (Node<E> e = first; e != null; e = e.next) {
+            result.append(e.item).append(", ");
+        }
+        int startIndex = result.lastIndexOf(", ");
+        result.replace(startIndex, result.length(), "]");
+        return result.toString();
     }
 
     //Перевірка чи індекс виходить за межі колекції
