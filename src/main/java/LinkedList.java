@@ -24,8 +24,6 @@ public class LinkedList<E> implements List<E> {
     }
 
     private Node<E> node(int index) {
-        // assert isElementIndex(index);
-
         if (index < (size >> 1)) {
             Node<E> x = first;
             for (int i = 0; i < index; i++)
@@ -66,20 +64,19 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
     public <T extends E> boolean contains(T element) {
-        return false;
+        return indexOf(element) != -1;
     }
 
-    //Конвертація колекції у масив
     @Override
     public E[] toArray() {
         E[] result = (E[]) new Object[size];
@@ -102,7 +99,6 @@ public class LinkedList<E> implements List<E> {
         return true;
     }
 
-    //Видалення з масиву першого конкретного елементу
     @Override
     public <T extends E> boolean remove(T element) {
         if (element == null) {
@@ -149,19 +145,6 @@ public class LinkedList<E> implements List<E> {
         }
     }
 
-    void linkBefore(E e, Node<E> succ) {
-        // assert succ != null;
-        final Node<E> pred = succ.prev;
-        final Node<E> newNode = new Node<>(pred, e, succ);
-        succ.prev = newNode;
-        if (pred == null)
-            first = newNode;
-        else
-            pred.next = newNode;
-        size++;
-    }
-
-
     @Override
     public void clear() {
         for (Node<E> x = first; x != null; ) {
@@ -177,10 +160,42 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Iterator<E>() {
+            private Node<E> lastReturned;
+            private Node<E> next = first;
+            private int nextIndex = 0;
+
+            @Override
+            public boolean hasNext() {
+                return nextIndex < size();
+            }
+
+            @Override
+            public E next() {
+                if (!hasNext()) throw new IndexOutOfBoundsException();
+                lastReturned = next;
+                next = lastReturned.next;
+                nextIndex++;
+                return lastReturned.item;
+            }
+
+            @Override
+            public void remove() {
+                if (lastReturned == null) throw new IllegalStateException();
+
+                Node<E> lastNext = lastReturned.next;
+                unlink(lastReturned);
+
+                if (next == lastReturned)
+                    next = lastNext;
+                else
+                    nextIndex--;
+
+                lastReturned = null;
+            }
+        };
     }
 
-    //Отримання елементу колекції по індексу
     @Override
     public E get(int index) {
         rangeCheck(index);
@@ -188,7 +203,6 @@ public class LinkedList<E> implements List<E> {
         return node(index).item;
     }
 
-    //Вставка по індексу конкретного елементу, метод повертає старий елемент
     @Override
     public <T extends E> E set(int index, T element) {
         rangeCheck(index);
@@ -237,7 +251,6 @@ public class LinkedList<E> implements List<E> {
         return result.toString();
     }
 
-    //Перевірка чи індекс виходить за межі колекції
     private void rangeCheck(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("get index =" + index + "but array size = " + size);
