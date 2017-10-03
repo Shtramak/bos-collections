@@ -7,9 +7,9 @@ import java.util.Iterator;
 import static org.junit.Assert.*;
 
 public abstract class AbstractList {
-    protected List<String> strings;
-    protected List<Integer> integers;
-    protected List<Object> emptyList;
+    private List<String> strings;
+    private List<Integer> integers;
+    private List<Object> emptyList;
 
     protected abstract List<String> getStringList();
 
@@ -31,10 +31,6 @@ public abstract class AbstractList {
         }
     }
 
-    private List<String> setList() {
-        return strings;
-    }
-
     @Test
     public void testAddByIndexString() {
         strings.add(0, "string0");
@@ -44,8 +40,6 @@ public abstract class AbstractList {
         String expected = "[string0, string1, string2, string2, string3, string5]";
         assertEquals(expected, strings.toString());
     }
-
-
 
     @Test
     public void testAddByIndexInteger() {
@@ -69,10 +63,8 @@ public abstract class AbstractList {
     public void testAddWithIndexOutOfBoundsException() {
         try {
             strings.add(-1, "Test22");
-            fail(); // if no exception was thrown
-        } catch (IndexOutOfBoundsException e) {
-            //Catch exception and go forward to check next step
-        }
+            fail();
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
         strings.add(22, "Test22");
     }
 
@@ -136,20 +128,26 @@ public abstract class AbstractList {
         try {
             strings.remove(10);
             fail();
-        } catch (IndexOutOfBoundsException e) {
-        }
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
         try {
             strings.remove(-1);
             fail();
-        } catch (IndexOutOfBoundsException e) {
-        }
+        } catch (IndexOutOfBoundsException e) {/*NOP*/}
         emptyList.remove(0);
+    }
+
+    @Test
+    public void testRemoveNullElement() {
+        emptyList.add(null);
+        emptyList.add(new Object());
+        assertTrue(emptyList.remove(null));
     }
 
     @Test
     public void testToArray() {
         String expected = "[string1, string2, string3]";
         assertEquals(expected, Arrays.toString(strings.toArray()));
+        assertEquals("[]", Arrays.toString(emptyList.toArray()));
     }
 
     @Test
@@ -214,7 +212,7 @@ public abstract class AbstractList {
     }
 
     @Test
-    public void testIterator() {
+    public void testIteratorNextAndHasNext() {
         String stringsToString = "[string1, string2, string3]";
         String integersToString = "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]";
         String emptyListToString = "[]";
@@ -237,6 +235,31 @@ public abstract class AbstractList {
         return result.toString().trim();
     }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testIteratorNextWithException() {
+        Iterator iterator = emptyList.iterator();
+        iterator.next();
+    }
+
+    @Test
+    public void testIteratorRemove() {
+        String stringsToString = "[string1, string3]";
+        String integersToString = "[0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14]";
+        removeIteratorElement(strings, "string2");
+        removeIteratorElement(integers, 6);
+        assertEquals(stringsToString, iteratorToString(strings));
+        assertEquals(integersToString, iteratorToString(integers));
+    }
+
+    private <E> void removeIteratorElement(List<E> list, E element) {
+        Iterator<E> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            E currentElement = iterator.next();
+            if (currentElement.equals(element))
+                iterator.remove();
+        }
+    }
+
     @Test
     public void testIndexOf() {
         int actual = strings.indexOf("string1");
@@ -249,5 +272,14 @@ public abstract class AbstractList {
         int actual = strings.indexOf("Error");
 
         assertEquals(-1, actual);
+    }
+
+    @Test
+    public void testIndexOfWithNullElement() {
+        emptyList.add(new Object());
+        emptyList.add(new Object());
+        emptyList.add(null);
+        emptyList.add(new Object());
+        assertEquals(2, emptyList.indexOf(null));
     }
 }
