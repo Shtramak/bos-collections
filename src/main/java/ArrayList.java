@@ -15,7 +15,7 @@ public class ArrayList<E> implements List<E> {
     public ArrayList(int size) {
         if (size < 0) throw new IllegalArgumentException("Argument must be positive. Entered argument:" + size);
         data = (E[]) new Object[size];
-        GROW_CAPACITY=size;
+        GROW_CAPACITY = size;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ArrayList<E> implements List<E> {
 
             @Override
             public E next() {
-                if(index >= size){
+                if (index >= size) {
                     throw new IndexOutOfBoundsException();
                 }
                 lastReturn = index;
@@ -51,7 +51,7 @@ public class ArrayList<E> implements List<E> {
 
             @Override
             public void remove() {
-                if(lastReturn<0) throw new IllegalStateException();
+                if (lastReturn < 0) throw new IllegalStateException();
                 ArrayList.this.remove(lastReturn);
                 index = lastReturn;
                 lastReturn--;
@@ -111,10 +111,12 @@ public class ArrayList<E> implements List<E> {
     @Override
     public <T extends E> E set(int index, T element) {
         rangeCheck(index);
+
         E oldObject = data[index];
         data[index] = element;
         return oldObject;
     }
+
     @Override
     public E remove(int index) {
         rangeCheck(index);
@@ -148,6 +150,7 @@ public class ArrayList<E> implements List<E> {
     @Override
     public <T extends E> boolean add(T element) {
         capacityCheck();
+
         data[size] = element;
         size++;
         return true;
@@ -157,6 +160,7 @@ public class ArrayList<E> implements List<E> {
     public <T extends E> void add(int index, T element) {
         rangeCheck(index);
         capacityCheck();
+
         System.arraycopy(data, index, data, index + 1, size - index);
         data[index] = element;
         size++;
@@ -164,7 +168,7 @@ public class ArrayList<E> implements List<E> {
 
     private void capacityCheck() {
         if (GROW_CAPACITY <= size + 1) {
-            GROW_CAPACITY = GROW_CAPACITY + (GROW_CAPACITY >> 1)+1;
+            GROW_CAPACITY = GROW_CAPACITY + (GROW_CAPACITY >> 1) + 1;
             if (GROW_CAPACITY < 0) {
                 throw new OutOfMemoryError();
             }
@@ -174,7 +178,7 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public void clear() {
-        for (int index = 0; index < size ; index++) {
+        for (int index = 0; index < size; index++) {
             data[index] = null;
         }
         size = 0;
@@ -182,13 +186,13 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public String toString() {
-        if (size==0) return "[]";
+        if (size == 0) return "[]";
         StringBuilder result = new StringBuilder("[");
-        for (int i=0;i<size;i++){
+        for (int i = 0; i < size; i++) {
             result.append(data[i]).append(", ");
         }
         int startIndex = result.lastIndexOf(", ");
-        result.replace(startIndex,result.length(),"]");
+        result.replace(startIndex, result.length(), "]");
         return result.toString();
     }
 }

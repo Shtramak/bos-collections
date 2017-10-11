@@ -1,11 +1,4 @@
 import java.util.Iterator;
-import java.util.NoSuchElementException;
-
-// yura_bart: remove(T), toArray, get, set
-
-//shtramak: add, remove(int), indexOf, add(int, T), clear
-
-//victor: size, isEmpty, iterator, contains
 
 public class LinkedList<E> implements List<E> {
     private Node<E> first;
@@ -31,8 +24,6 @@ public class LinkedList<E> implements List<E> {
     }
 
     private Node<E> node(int index) {
-        // assert isElementIndex(index);
-
         if (index < (size >> 1)) {
             Node<E> x = first;
             for (int i = 0; i < index; i++)
@@ -71,25 +62,21 @@ public class LinkedList<E> implements List<E> {
     }
 
 
-    //    довжина LinkedList
     @Override
     public int size() {
         return size;
     }
 
-    //  метод вертая true якщо List порожній
     @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
-    //метод вертая true якщо в List знайдено заданий елемент
     @Override
     public <T extends E> boolean contains(T element) {
         return indexOf(element) != -1;
     }
 
-    //Конвертація колекції у масив
     @Override
     public E[] toArray() {
         E[] result = (E[]) new Object[size];
@@ -112,7 +99,6 @@ public class LinkedList<E> implements List<E> {
         return true;
     }
 
-    //Видалення з масиву першого конкретного елементу
     @Override
     public <T extends E> boolean remove(T element) {
         if (element == null) {
@@ -186,7 +172,7 @@ public class LinkedList<E> implements List<E> {
 
             @Override
             public E next() {
-                if (!hasNext()) throw new NoSuchElementException();
+                if (!hasNext()) throw new IndexOutOfBoundsException();
                 lastReturned = next;
                 next = lastReturned.next;
                 nextIndex++;
@@ -210,7 +196,6 @@ public class LinkedList<E> implements List<E> {
         };
     }
 
-    //Отримання елементу колекції по індексу
     @Override
     public E get(int index) {
         rangeCheck(index);
@@ -218,7 +203,6 @@ public class LinkedList<E> implements List<E> {
         return node(index).item;
     }
 
-    //Вставка по індексу конкретного елементу, метод повертає старий елемент
     @Override
     public <T extends E> E set(int index, T element) {
         rangeCheck(index);
@@ -267,7 +251,6 @@ public class LinkedList<E> implements List<E> {
         return result.toString();
     }
 
-    //Перевірка чи індекс виходить за межі колекції
     private void rangeCheck(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("get index =" + index + "but array size = " + size);
